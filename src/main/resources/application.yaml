@@ -1,0 +1,52 @@
+spring:
+  application:
+    name: jobscan
+  threads:
+    virtual:
+      enabled: true
+  rabbitmq:
+    listener:
+      simple:
+        default-requeue-rejected: false 
+        retry:
+          enabled: true
+          max-attempts: 3 
+          initial-interval: 2000ms
+
+telegram:
+  bot:
+    token: "8872673107:AAHTzVnGzaWpZDgKFy_oGxpNdq6QUplQ09Q"
+    username: "RadarSerchBot"
+    owner-chat-id: "625125689"
+    
+user:
+  profile:
+    match-threshold: 75
+    skills:
+      - "Java"
+      - "Spring Boot"
+      - "Spring Security"
+      - "Spring Data"
+      - "Hibernate"
+      - "PostgreSQL"
+      - "Flyway"
+      - "Redis"
+      - "RabbitMQ"
+      - "Docker"
+      - "CI/CD"
+      - "Git"
+      - "GitHub"
+      - "Linux"
+      - "JWT"
+      - "REST APIs"
+      - "Maven"
+      - "JUnit"
+      - "SQL"
+    title-stop-words:
+      - "Senior"
+      - "Lead"
+      - "Architect"
+      - "Principal"
+    description-stop-words:
+      - "Kotlin"
+      - "PHP"
