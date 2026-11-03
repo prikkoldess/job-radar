@@ -12,7 +12,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.jobscan.bot.state.BotUserService;
 import com.jobscan.config.RabbitMQConfig;
+import com.jobscan.config.TelegramProperties;
 import com.jobscan.queue.event.JobUrlDiscoveredEvent;
 import com.jobscan.scraper.deduplication.JobDeduplicationService;
 import com.jobscan.scraper.djinni.DjinniClient;
@@ -28,8 +30,9 @@ public class JobScrapingScheduler {
     private final DjinniClient djinniClient;
     private final RabbitTemplate rabbitTemplate;
     private final JobDeduplicationService deduplicationService;
+    private final BotUserService botUserService;
+    private final TelegramProperties telegramProperties;
 
-    private static final String DJINNI_SEARCH_URL = "https://djinni.co/jobs/?primary_keyword=Java&exp_level=2y&employment=remote";
     private static final String BASE_URL = "https://djinni.co";
     private static final Pattern ID_PATTERN = Pattern.compile("/jobs/(\\d+)-");
 
@@ -37,7 +40,10 @@ public class JobScrapingScheduler {
     public void scheduleDjinniScraping() {
         log.info("Starting Djinni job scraping cycle...");
 
-        Optional<Document> pageOpt = djinniClient.fetchPage(DJINNI_SEARCH_URL);
+        Long ownerChatId = Long.parseLong(telegramProperties.getOwnerChatId());
+        String currentDjinniUrl = botUserService.getOrCreateUser(ownerChatId).getDjinniUrl();
+
+        Optional<Document> pageOpt = djinniClient.fetchPage(currentDjinniUrl);
         if (pageOpt.isEmpty()) {
             log.error("Failed to fetch Djinni search page.");
             return;
