@@ -14,7 +14,7 @@ public class BotUserService {
     private final BotUserRepository botUserRepository;
     private final UserProfileProperties userProfile;
 
-    private static final String DEFAULT_DJINNI_URL = "https://djinni.co/jobs/?primary_keyword=Java&exp_level=2y&employment=remote";
+    private static final String DEFAULT_DJINNI_URL = "https://djinni.co/jobs/?primary_keyword=Java&exp_level=3y&employment=remote";
 
     @Transactional
     public BotUser getOrCreateUser(Long chatId) {
@@ -33,6 +33,7 @@ public class BotUserService {
     @Transactional
     public void updateThreshold(Long chatId, Integer threshold) {
         BotUser user = getOrCreateUser(chatId);
-        botUserRepository.save(new BotUser(chatId, threshold, user.getDjinniUrl()));
+        user.setMatchThreshold(threshold);
+        botUserRepository.save(user);
     }
 }

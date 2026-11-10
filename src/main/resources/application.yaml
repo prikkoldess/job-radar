@@ -15,9 +15,9 @@ spring:
 
 telegram:
   bot:
-    token: "8872673107:AAHTzVnGzaWpZDgKFy_oGxpNdq6QUplQ09Q"
-    username: "RadarSerchBot"
-    owner-chat-id: "625125689"
+    token: ${TELEGRAM_BOT_TOKEN:fake_token}
+    username: ${TELEGRAM_BOT_USERNAME:fake_bot}
+    owner-chat-id: ${TELEGRAM_CHAT_ID:0}
     
 user:
   profile:

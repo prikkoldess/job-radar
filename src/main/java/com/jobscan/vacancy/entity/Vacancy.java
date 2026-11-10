@@ -87,7 +87,7 @@ public class Vacancy {
     private Map<String, String> languages;
 
     @Column(name = "applications_count")
-    private Integer applicationCount;
+    private Integer applicationsCount;
 
     public Vacancy(String externalId, String source, String url, String title, Company company, String description,
             String salaryFork, int matchScore, SkillsBreakdown skillsBreakdown, Map<String, String> languages,
@@ -103,7 +103,7 @@ public class Vacancy {
         this.matchScore = matchScore;
         this.skillsBreakdown = skillsBreakdown != null ? skillsBreakdown : SkillsBreakdown.empty();
         this.languages = languages != null ? languages : new HashMap<>();
-        this.applicationCount = applicationsCount != null ? applicationsCount : 0;
+        this.applicationsCount = applicationsCount != null ? applicationsCount : 0;
         this.status = VacancyStatus.NEW;
         this.publishedAt = publishedAt;
         this.createdAt = Instant.now();

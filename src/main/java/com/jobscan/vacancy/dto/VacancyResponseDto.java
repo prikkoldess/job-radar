@@ -37,7 +37,7 @@ public record VacancyResponseDto(
                 vacancy.getSkillsBreakdown(),
                 vacancy.getStatus(),
                 vacancy.getLanguages(),
-                vacancy.getApplicationCount(),
+                vacancy.getApplicationsCount(),
                 vacancy.getPublishedAt());
     }
 }

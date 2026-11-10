@@ -18,9 +18,15 @@ public class RateLimiterService {
 
     public void acquire(String source) {
         while (true) {
-
             long currentMinute = Instant.now().getEpochSecond() / 60;
             String key = "rate_limit:" + source.toLowerCase() + ":" + currentMinute;
+
+            String countStr = redisTemplate.opsForValue().get(key);
+            if (countStr != null && Integer.parseInt(countStr) >= MAX_REQUESTS_PER_MINUTE) {
+                log.debug("Rate limit exceeded for {}. Virtual thread goes to sleep...", source);
+                sleep();
+                continue;
+            }
 
             Long currentRequests = redisTemplate.opsForValue().increment(key);
 
@@ -32,15 +38,16 @@ public class RateLimiterService {
                 return;
             }
 
-            log.debug("Rate limit exceeded for {}. Virtual thread goes to sleep...", source);
+            sleep();
+        }
+    }
 
-            try {
-
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException("Rate limiter interrupted", e);
-            }
+    private void sleep() {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("Rate limiter interrupted", e);
         }
     }
 }
